@@ -113,6 +113,7 @@ const Products = (props) => {
   //const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png"];
 
   let list = items.map((item, index) => {
+    //console.log(`index is ${index}`)
     let n = Math.floor(Math.random() * 100);
     let url = "https://picsum.photos/id/" + n + "/50/50";
 
@@ -120,7 +121,7 @@ const Products = (props) => {
       <li key={index}>
         <Image src={url} width={70} roundedCircle></Image>
         <Button variant="primary" size="large">
-          {item.name}:{item.cost}
+          {item.name}:{item.cost} & Stock = {item.instock}
         </Button>
         <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
