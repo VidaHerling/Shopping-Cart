@@ -110,15 +110,15 @@ const Products = (props) => {
     let newCart = cart.filter((item, i) => index != i);
     setCart(newCart);
   };
-  const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png"];
+  //const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png"];
 
   let list = items.map((item, index) => {
-    //let n = index + 1049;
-    //let url = "https://picsum.photos/id/" + n + "/50/50";
+    let n = Math.floor(Math.random() * 100);
+    let url = "https://picsum.photos/id/" + n + "/50/50";
 
     return (
       <li key={index}>
-        <Image src={photos[index % 4]} width={70} roundedCircle></Image>
+        <Image src={url} width={70} roundedCircle></Image>
         <Button variant="primary" size="large">
           {item.name}:{item.cost}
         </Button>
@@ -126,6 +126,7 @@ const Products = (props) => {
       </li>
     );
   });
+  
   let cartList = cart.map((item, index) => {
     return (
       <Card key={index}>
