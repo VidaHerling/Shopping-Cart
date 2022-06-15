@@ -101,23 +101,28 @@ const Products = (props) => {
   // Fetch Data
   const addToCart = (e) => {
     let name = e.target.name;
-    console.log(name)
     let item = items.filter((item) => item.name == name);
     let index = items.findIndex(item => item.name === name);
     console.log( `index is ${index}`)
     console.log(`add to Cart ${JSON.stringify(item)}`);
-    setCart([...cart, ...item]);
-    reduceStock(index); //reduce the stock when the item is add to Cart;
+    reduceStock(index, item); //reduce the stock when the item is add to Cart;
     //doFetch(query);
   };
 
-  const reduceStock = (index) =>{
+  const reduceStock = (index, item) =>{
+    if(items[index].instock <= 0) {
+      return;
+    } else {
+    setCart([...cart, ...item]);
     return items[index].instock -= 1;
-  ;}
+  }
+  }
 
   const deleteCartItem = (index) => {
     let newCart = cart.filter((item, i) => index != i);
     setCart(newCart);
+    console.log(`items in the cart: ${JSON.stringify(cart)}`)
+    return cart[index].instock += 1;
   };
 
   let list = items.map((item, index) => {
