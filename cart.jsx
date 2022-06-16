@@ -48,6 +48,7 @@ const useDataApi = (initialUrl, initialData) => {
   }, [url]);
   return [state, setUrl];
 };
+
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
     case "FETCH_INIT":
@@ -90,9 +91,9 @@ const Products = (props) => {
   } = ReactBootstrap;
   //  Fetch Data
   const { Fragment, useState, useEffect, useReducer } = React;
-  const [query, setQuery] = useState("http://localhost:1337/products");
+  const [query, setQuery] = useState("http://localhost:1337/api/products");
   const [{ data, isLoading, isError }, doFetch] = useDataApi(
-    "http://localhost:1337/products",
+    "http://localhost:1337/api/products",
     {
       data: [],
     }
@@ -103,7 +104,7 @@ const Products = (props) => {
     let name = e.target.name;
     let item = items.filter((item) => item.name == name);
     let index = items.findIndex(item => item.name === name);
-    console.log( `index is ${index}`)
+    console.log( `index is ${index}`);
     console.log(`add to Cart ${JSON.stringify(item)}`);
     reduceStock(index, item); //reduce the stock when the item is add to Cart;
     //doFetch(query);
@@ -127,7 +128,7 @@ const Products = (props) => {
 
   let list = items.map((item, index) => {
     //console.log(`index is ${index}`)
-    let n = Math.floor(Math.random() * 100);
+    let n = index + 500;
     let url = "https://picsum.photos/id/" + n + "/50/50";
 
     return (
@@ -181,7 +182,16 @@ const Products = (props) => {
     return newTotal;
   };
   // TODO: implement the restockProducts function
-  const restockProducts = (url) => {};
+  const restockProducts = (url) => {
+    doFetch(url);
+    console.log(`strapi data is ${JSON.stringify(data.data)}`)
+    const restockItems = data.data;
+    let newItems = restockItems.map((item) => {
+      let { name, country, cost, instock } = item.attributes;
+      return { name, country, cost, instock }
+    })
+    setItems([...items, ...newItems])
+  };
 
   return (
     <Container>
@@ -203,7 +213,7 @@ const Products = (props) => {
       <Row>
         <form
           onSubmit={(event) => {
-            restockProducts(`http://localhost:1337/${query}`);
+            restockProducts({query});
             console.log(`Restock called on ${query}`);
             event.preventDefault();
           }}
